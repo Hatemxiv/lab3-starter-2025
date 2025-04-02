@@ -1,0 +1,23 @@
+'1.0':
+  What is your email address?:
+    answer: hatem_mohamed@brown.edu
+    assumptions: []
+  What is your kerberos?:
+    answer: B01966838
+    assumptions: []
+  What is your name?:
+    answer: Hatem Mohamed
+    assumptions: []
+'1.1':
+  Which datatype maximizes data reuse?:
+    answer: output activations
+    assumptions: []
+1.2.2:
+  'True/False: These components are made of multiple subcomponents. (False if they are made of a single subcomponent)':
+    answer: false
+    assumptions: []
+1.2.3:
+  ? 'True/False: According to description of the `mac_compute` compound component,
+    is our architecture capable of performing floating point computations?'
+  : answer: false
+    assumptions: []
