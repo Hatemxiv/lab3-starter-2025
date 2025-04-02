@@ -12,6 +12,16 @@
   Which datatype maximizes data reuse?:
     answer: output activations
     assumptions: []
+1.2.1:
+  How many bits used to represent a value?:
+    answer: 16
+    assumptions: []
+  How many bytes is the local scratchpad?:
+    answer: 256
+    assumptions: []
+  What is the number of memory levels (including DRAM and registers):
+    answer: 3
+    assumptions: []
 1.2.2:
   'True/False: These components are made of multiple subcomponents. (False if they are made of a single subcomponent)':
     answer: false
@@ -20,4 +30,193 @@
   ? 'True/False: According to description of the `mac_compute` compound component,
     is our architecture capable of performing floating point computations?'
   : answer: false
+    assumptions: []
+'1.3':
+  What is the DRAM write energy?:
+    answer: 512
+    assumptions: []
+  What is the mac compute energy?:
+    answer: 3.275
+    assumptions: []
+  What is the scratchpad leak energy?:
+    answer: 0.0007728
+    assumptions: []
+'1.4':
+  What are the [M0, N0, C0] factors?:
+    answer:
+    - 2
+    - 1
+    - 1
+    assumptions: []
+  What are the [S, R, P, Q] factors?:
+    answer:
+    - 0
+    - 0
+    - 0
+    - 0
+    assumptions: []
+'1.5':
+  What are the output P and Q? P and Q are the same, so just give one value.:
+    answer: 28
+    assumptions: []
+  What are the weight R and S? R and S are the same, so just give one value.:
+    answer: 5
+    assumptions: []
+  What is the batch size?:
+    answer: 50
+    assumptions: []
+  What is the number of cycles?:
+    answer: 31360000
+    assumptions: []
+  What is the number of input channels?:
+    answer: 4
+    assumptions: []
+  What is the number of output channels?:
+    answer: 2
+    assumptions: []
+  What is the pJ/compute:
+    answer: 387.025
+    assumptions: []
+  What is the total DRAM energy (pJ overall, NOT PER MAC)?:
+    answer: 12007219200
+    assumptions: []
+  What is the total MAC energy (pJ overall, NOT PER MAC)?:
+    answer: 102704000
+    assumptions: []
+  What is the total scratchpad energy (pJ overall, NOT PER MAC)?:
+    answer: 66732.8
+    assumptions: []
+'1.6':
+  What is the leak energy of the scratchpad (pJ)?:
+    answer: 0.00113217
+    assumptions: []
+  What is the read energy of the scratchpad (pJ)?:
+    answer: 0.866972
+    assumptions: []
+  What is the write energy of the scratchpad (pJ)?:
+    answer: 1.66832
+    assumptions: []
+  What parameters did you put for (name, class, technology, datawidth, write_action, read_action, leak_action)?:
+    answer:
+    - address_generator
+    - intadder
+    - '"45nm"'
+    - '5'
+    - add
+    - add
+    - leak
+    assumptions: []
+'1.7':
+  Setting for DRAM_factor_C in the os_map_config:
+    answer: 4
+    assumptions: []
+  Setting for DRAM_factor_M in the os_map_config:
+    answer: 4
+    assumptions: []
+  Setting for DRAM_factor_N in the os_map_config:
+    answer: 50
+    assumptions: []
+  Setting for DRAM_factor_P in the os_map_config:
+    answer: 28
+    assumptions: []
+  Setting for DRAM_factor_Q in the os_map_config:
+    answer: 1
+    assumptions: []
+  Setting for DRAM_factor_R in the os_map_config:
+    answer: 1
+    assumptions: []
+  Setting for DRAM_factor_S in the os_map_config:
+    answer: 1
+    assumptions: []
+  Setting for DRAM_permutation in the os_map_config:
+    answer:
+    - S
+    - R
+    - Q
+    - P
+    - C
+    - M
+    - N
+    assumptions: []
+  Setting for scratchpad_bypass_list in the os_map_config:
+    answer:
+    - Inputs
+    - Weights
+    assumptions: []
+  Setting for scratchpad_factor_C in the os_map_config:
+    answer: 1
+    assumptions: []
+  Setting for scratchpad_factor_M in the os_map_config:
+    answer: 2
+    assumptions: []
+  Setting for scratchpad_factor_N in the os_map_config:
+    answer: 1
+    assumptions: []
+  Setting for scratchpad_factor_P in the os_map_config:
+    answer: 1
+    assumptions: []
+  Setting for scratchpad_factor_Q in the os_map_config:
+    answer: 28
+    assumptions: []
+  Setting for scratchpad_factor_R in the os_map_config:
+    answer: 5
+    assumptions: []
+  Setting for scratchpad_factor_S in the os_map_config:
+    answer: 5
+    assumptions: []
+  Setting for scratchpad_keep_list in the os_map_config:
+    answer:
+    - Outputs
+    assumptions: []
+  Setting for scratchpad_permutation in the os_map_config:
+    answer:
+    - R
+    - S
+    - C
+    - N
+    - M
+    - Q
+    - P
+    assumptions: []
+1.7.2:
+  DRAM energy (pJ overall, NOT PER MAC):
+    answer: 8309145600
+    assumptions: []
+  MAC energy (pJ overall, NOT PER MAC):
+    answer: 102704000
+    assumptions: []
+  Number of cycles:
+    answer: 31360000
+    assumptions: []
+  Scratchpad energy (pJ overall, NOT PER MAC):
+    answer: 2615925.76
+    assumptions: []
+  Total pJ/compute:
+    answer: 269.19
+    assumptions: []
+'1.8':
+  ? How many inputs, outputs, and weights (including duplicates) are transferred from
+    DRAM to the scratchpad? Answer in the order of inputs, outputs, and weights.
+  : answer:
+    - 2048
+    - 2048
+    - 2048
+    assumptions: []
+  ? How many inputs, outputs, and weights (including duplicates) are transferred from
+    the scratchpad to the registers? Answer in the order of inputs, outputs, and weights.
+  : answer:
+    - 16
+    - 16
+    - 16
+    assumptions: []
+'2.1':
+  ? What variable names change the number of PEs in the X and Y dimensions? Please
+    give the name of the double-curly-brace-enclosed variables. Case sensitive.
+  : answer:
+    - pe_meshX
+    - pe_meshY
+    assumptions: []
+'2.3':
+  What is the PE utilization (number of utilized PEs divided by total number of PEs)?.:
+    answer: 0.25
     assumptions: []
