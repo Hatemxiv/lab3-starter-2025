@@ -14,8 +14,8 @@ architecture:
           - name: DRAM[1..1]
             class: DRAM
             attributes:
+                datawidth: 16
                 width: 64
-                datawidth: 16
                 has_power_gating: false
                 n_banks: 2
                 cluster_size: 1
@@ -34,56 +34,12 @@ architecture:
               - read
               - write
             enabled: true
-          - name: global_buffer[1..1]
-            class: SRAM
-            attributes:
-                width: 128
-                depth: 2048
-                datawidth: 16
-                n_banks: 1
-                n_rdwr_ports: 2
-                has_power_gating: false
-                cluster_size: 1
-                reduction_supported: true
-                multiple_buffering: 1
-                min_utilization: 0
-                allow_overbooking: false
-                meshX: 1
-                meshY: 1
-                technology: "45nm"
-                global_cycle_seconds: 1e-9
-                power_gated_at: null
-            required_actions:
-              - update
-              - leak
-              - read
-              - write
-            enabled: true
-          - name: inter_PE_spatial[1..1]
-            class: dummy_storage
-            attributes:
-                width: 1
-                depth: 1
-                datawidth: 1
-                technology: -1
-                has_power_gating: false
-                n_banks: 2
-                cluster_size: 1
-                reduction_supported: true
-                multiple_buffering: 1
-                min_utilization: 0
-                allow_overbooking: false
-                meshX: 1
-                meshY: 1
-                global_cycle_seconds: 1e-9
-                power_gated_at: null
-            enabled: true
-          - name: scratchpad[1..16]
+          - name: scratchpad[1..1]
             class: smart_storage
             attributes:
                 depth: 128
-                width: 16
                 datawidth: 16
+                width: 16
                 has_power_gating: false
                 n_banks: 2
                 cluster_size: 1
@@ -92,7 +48,7 @@ architecture:
                 min_utilization: 0
                 allow_overbooking: false
                 meshX: 1
-                meshY: 16
+                meshY: 1
                 technology: "45nm"
                 global_cycle_seconds: 1e-9
                 power_gated_at: null
@@ -102,12 +58,12 @@ architecture:
               - read
               - write
             enabled: true
-          - name: weight_reg[1..16]
+          - name: weight_reg[1..1]
             class: reg_storage
             attributes:
                 depth: 1
-                width: 16
                 datawidth: 16
+                width: 16
                 has_power_gating: false
                 n_banks: 2
                 cluster_size: 1
@@ -116,7 +72,7 @@ architecture:
                 min_utilization: 0
                 allow_overbooking: false
                 meshX: 1
-                meshY: 16
+                meshY: 1
                 technology: "45nm"
                 global_cycle_seconds: 1e-9
                 power_gated_at: null
@@ -126,12 +82,12 @@ architecture:
               - read
               - write
             enabled: true
-          - name: input_activation_reg[1..16]
+          - name: input_activation_reg[1..1]
             class: reg_storage
             attributes:
                 depth: 1
-                width: 16
                 datawidth: 16
+                width: 16
                 has_power_gating: false
                 n_banks: 2
                 cluster_size: 1
@@ -140,7 +96,7 @@ architecture:
                 min_utilization: 0
                 allow_overbooking: false
                 meshX: 1
-                meshY: 16
+                meshY: 1
                 technology: "45nm"
                 global_cycle_seconds: 1e-9
                 power_gated_at: null
@@ -150,12 +106,12 @@ architecture:
               - read
               - write
             enabled: true
-          - name: output_activation_reg[1..16]
+          - name: output_activation_reg[1..1]
             class: reg_storage
             attributes:
                 depth: 1
-                width: 16
                 datawidth: 16
+                width: 16
                 has_power_gating: false
                 n_banks: 2
                 cluster_size: 1
@@ -164,7 +120,7 @@ architecture:
                 min_utilization: 0
                 allow_overbooking: false
                 meshX: 1
-                meshY: 16
+                meshY: 1
                 technology: "45nm"
                 global_cycle_seconds: 1e-9
                 power_gated_at: null
@@ -174,14 +130,14 @@ architecture:
               - read
               - write
             enabled: true
-          - name: mac[1..16]
+          - name: mac[1..1]
             class: mac_compute
             attributes:
                 num_pipline_stages: 2
                 datawidth: 16
                 has_power_gating: false
                 meshX: 1
-                meshY: 16
+                meshY: 1
                 technology: "45nm"
                 global_cycle_seconds: 1e-9
                 power_gated_at: null
@@ -354,42 +310,23 @@ compound_components:
 mapping:
   - target: DRAM
     type: temporal
-    factors: P=1,Q=1,R=1,S=1,N=50,M=2,C=4
+    factors: R=1,S=1,P=0,Q=1,N=50,M=4,C=4
     permutation: SRQPCMN
-  - target: global_buffer
-    type: temporal
-    factors: P=1,Q=1,R=1,S=1,N=1,M=1,C=1
-    permutation: SRQPCMN
-  - type: spatial
-    target: inter_PE_spatial
-    factors: P=1,Q=1,R=1,S=1,N=1,M=4,C=1
-    permutation: CMRSPQN
-    split: 1
-  - factors: C=1,M=1,R=1,S=1,N=1,P=1,Q=1
-    permutation: CMRSNPQ
-    type: temporal
-    target: inter_PE_spatial
-  - bypass:
-      - Weights
-      - Inputs
-      - Outputs
-    type: bypass
-    target: inter_PE_spatial
   - target: scratchpad
     type: temporal
-    factors: R=0,S=0,P=0,Q=0,M=1,C=1,N=1
-    permutation: QPNCMSR
+    factors: R=0,S=0,P=1,Q=0,N=1,M=2,C=1
+    permutation: RSCNMQP
   - target: scratchpad
     type: bypass
     keep:
-      - Weights
+      - 'Outputs'
     bypass:
-      - Inputs
-      - Outputs
+      - 'Inputs'
+      - 'Weights'
   - target: weight_reg
     type: temporal
-    factors: R=1,S=1,P=1,Q=1,N=1,C=1,M=1
-    permutation: RSPQCMN
+    factors: R=1,S=1,P=1,Q=1,M=1,C=1,N=1
+    permutation: PQCMRSN
   - target: weight_reg
     type: bypass
     keep:
@@ -399,8 +336,8 @@ mapping:
       - Outputs
   - target: input_activation_reg
     type: temporal
-    factors: R=1,S=1,P=1,Q=1,N=1,C=1,M=1
-    permutation: RSPQCMN
+    factors: R=1,S=1,P=1,Q=1,M=1,C=1,N=1
+    permutation: PQCMRSN
   - target: input_activation_reg
     type: bypass
     keep:
@@ -410,8 +347,8 @@ mapping:
       - Outputs
   - target: output_activation_reg
     type: temporal
-    factors: R=1,S=1,P=1,Q=1,N=1,C=1,M=1
-    permutation: RSPQCMN
+    factors: R=1,S=1,P=1,Q=1,M=1,C=1,N=1
+    permutation: PQCMRSN
   - target: output_activation_reg
     type: bypass
     keep:
@@ -455,19 +392,15 @@ ART:
     tables:
       - name: system_arch_top_level.DRAM[1..1]
         area: 0.0
-      - name: system_arch_top_level.global_buffer[1..1]
-        area: 97538.7
-      - name: system_arch_top_level.inter_PE_spatial[1..1]
-        area: 1.0
-      - name: system_arch_top_level.scratchpad[1..16]
+      - name: system_arch_top_level.scratchpad[1..1]
         area: 1965.98
-      - name: system_arch_top_level.weight_reg[1..16]
+      - name: system_arch_top_level.weight_reg[1..1]
         area: 95.68
-      - name: system_arch_top_level.input_activation_reg[1..16]
+      - name: system_arch_top_level.input_activation_reg[1..1]
         area: 95.68
-      - name: system_arch_top_level.output_activation_reg[1..16]
+      - name: system_arch_top_level.output_activation_reg[1..1]
         area: 95.68
-      - name: system_arch_top_level.mac[1..16]
+      - name: system_arch_top_level.mac[1..1]
         area: 1726.5
 ERT:
     version: '0.4'
@@ -494,29 +427,7 @@ ERT:
                 global_cycle_seconds: 1e-09
                 action_latency_cycles: 1
             energy: 512.0
-      - name: system_arch_top_level.global_buffer[1..1]
-        actions:
-          - name: update
-            arguments:
-                global_cycle_seconds: 1e-09
-                action_latency_cycles: 1
-            energy: 27.5274
-          - name: leak
-            arguments:
-                global_cycle_seconds: 1e-09
-                action_latency_cycles: 1
-            energy: 0.000927107
-          - name: read
-            arguments:
-                global_cycle_seconds: 1e-09
-                action_latency_cycles: 1
-            energy: 20.3074
-          - name: write
-            arguments:
-                global_cycle_seconds: 1e-09
-                action_latency_cycles: 1
-            energy: 27.5274
-      - name: system_arch_top_level.scratchpad[1..16]
+      - name: system_arch_top_level.scratchpad[1..1]
         actions:
           - name: read
             arguments: {}
@@ -530,7 +441,7 @@ ERT:
           - name: leak
             arguments: {}
             energy: 0.0007728
-      - name: system_arch_top_level.weight_reg[1..16]
+      - name: system_arch_top_level.weight_reg[1..1]
         actions:
           - name: read
             arguments: {}
@@ -544,7 +455,7 @@ ERT:
           - name: leak
             arguments: {}
             energy: 0.00112
-      - name: system_arch_top_level.input_activation_reg[1..16]
+      - name: system_arch_top_level.input_activation_reg[1..1]
         actions:
           - name: read
             arguments: {}
@@ -558,7 +469,7 @@ ERT:
           - name: leak
             arguments: {}
             energy: 0.00112
-      - name: system_arch_top_level.output_activation_reg[1..16]
+      - name: system_arch_top_level.output_activation_reg[1..1]
         actions:
           - name: read
             arguments: {}
@@ -572,7 +483,7 @@ ERT:
           - name: leak
             arguments: {}
             energy: 0.00112
-      - name: system_arch_top_level.mac[1..16]
+      - name: system_arch_top_level.mac[1..1]
         actions:
           - name: compute
             arguments: {}
